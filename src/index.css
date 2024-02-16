@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hide {
+  visibility: visible;
+
+  animation-name: hideAnimation;
+  animation-fill-mode: forwards;
+  animation-duration: 2s;
+}
+
+@keyframes hideAnimation {
+  0% {
+    left: 50%;
+    top: 10%;
+  }
+
+  50% {
+    left: 100%;
+    top: 200%;
+
+    visibility: hidden;
+  }
+
+  100% {
+    left: 0;
+    top: 200%;
+
+    visibility: hidden;
+  }
+}
+/* .show {
+  left: 50%;
+  top: 10%;
+  z-index: 100;
+  visibility: visible !important;
+  transition: left 1s, top 1s;
+} */
+
+.show {
+  visibility: visible !important;
+  animation-name: showAnimation;
+  animation-fill-mode: forwards;
+  animation-iteration-count: 1;
+  animation-duration: 1s;
+}
+
+@keyframes showAnimation {
+  0% {
+    left: 0;
+    top: 200%;
+  }
+
+  100% {
+    left: 50%;
+    top: 10%;
+  }
+}
+
+.dark {
+  background-color: rgb(81, 79, 79);
+  color: black;
+  transition: background-color 1s, color 1s;
+}
+
+.light {
+  background-color: rgb(253 224 71);
+  color: white;
+  transition: background-color 1s, color 1s;
+}
+
+/* the button sun and moon  icons : */
+/* test rotate the div  */
+
+/* #theDiv {
+  top: -92%;
+  left: -10%;
+}
+
+#theDiv span {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+}
+#theDiv span:first-child {
+  top: 25%;
+} */
+
+/* dark mode  */
+
+/* body #root {
+  --backgroundColor: rgb(253 224 71);
+  --textColor: white;
+
+  background: var(--backgroundColor);
+  color: var(--textColor);
+  transition: background-color 1s, color 1s;
+}
+
+body #root.darkHello {
+  --backgroundColor: rgb(81, 79, 79);
+  --textColor: black;
+  transition: background-color 1s, color 1s;
+} */
+/* body #root button {
+  background: var(--backgroundColor);
+  color: var(--textColor);
+  transition: background-color 1s, color 1s;
+}
+body #root.darkHello button {
+  --backgroundColor: rgb(81, 79, 79);
+  --textColor: black;
+  transition: background-color 1s, color 1s;
+} */
