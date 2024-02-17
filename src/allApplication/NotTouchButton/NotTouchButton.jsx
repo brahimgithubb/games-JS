@@ -57,7 +57,7 @@ const NotTouchButton = () => {
       //   case 02 x= 0 , 0<y<100%
       if (info.x <= 0) {
         console.log("outside case 02");
-        elem.left = `${info.left - info.width}px `;
+        elem.left = `${info.left + info.width}px `;
       }
 
       //   case 03 y= 100% , 0<y<100%

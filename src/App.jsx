@@ -1,11 +1,11 @@
-import NotTouchButton from "./allComponent/NotTouchButton";
-import Them from "./darkLightComponents/Them";
-import SecondTrie from "./darkLightComponents/secondTrie";
+import Them from "./allApplication/darkLightComponents/Them";
+import NotTouchButton from "./allApplication/NotTouchButton/NotTouchButton";
+import RoPaSe from "./allApplication/RockPaperSeiser/RoPaSe";
 
 function App() {
   // return <Them />;
-  // return <SecondTrie />;
-  return <NotTouchButton />;
+  // return <NotTouchButton />;
+  return <RoPaSe />;
 }
 
 export default App;
