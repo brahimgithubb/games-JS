@@ -5,7 +5,9 @@ import RoPaSe from "./allApplication/RockPaperSeiser/RoPaSe";
 function App() {
   // return <Them />;
   // return <NotTouchButton />;
-  return <RoPaSe />;
+  // return <RoPaSe />;
+
+  return <h1>Hello from App </h1>;
 }
 
 export default App;
