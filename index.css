@@ -89,7 +89,7 @@
 
 /* dark mode  */
 
-body #root {
+/* body #root {
   --backgroundColor: rgb(253 224 71);
   --textColor: white;
 
@@ -113,7 +113,7 @@ body #root.darkHello button {
   --backgroundColor: rgb(81, 79, 79);
   --textColor: black;
   transition: background-color 1s, color 1s;
-}
+} */
 
 /* Sneak css  */
 /*  */
