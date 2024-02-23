@@ -89,7 +89,7 @@
 
 /* dark mode  */
 
- body #root {
+body #root {
   --backgroundColor: rgb(253 224 71);
   --textColor: white;
 
@@ -102,8 +102,8 @@ body #root.darkHello {
   --backgroundColor: rgb(81, 79, 79);
   --textColor: black;
   transition: background-color 1s, color 1s;
-} */
-/* body #root button {
+}
+*/ #root button {
   background: var(--backgroundColor);
   color: var(--textColor);
   transition: background-color 1s, color 1s;
@@ -112,10 +112,10 @@ body #root.darkHello button {
   --backgroundColor: rgb(81, 79, 79);
   --textColor: black;
   transition: background-color 1s, color 1s;
-} 
+}
 
 .iconRPS {
-  @apply text-5xl flex justify-center items-center text-yellow-500 transition-text duration-500  hover:text-6xl;
+  @apply text-5xl  flex justify-center items-center text-yellow-500 transition-text duration-500  hover:text-6xl;
 }
 
 .spanResult {
