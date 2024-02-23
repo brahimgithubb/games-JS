@@ -1,15 +1,13 @@
 import React from "react";
 
 import Sneak from "./Sneak";
-import ControlsHelp from "./ControlsHelpjj";
 
-const TheMain = () => {
+const TheMainSneak = () => {
   return (
     <>
       <Sneak />
-      {/* <ControlsHelp start={} stop={}/> */}
     </>
   );
 };
 
-export default TheMain;
+export default TheMainSneak;

@@ -2,19 +2,41 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 
 const Sneak = () => {
-  const array = [1, 2, 3, 4, 5];
+  const array = [1, 2, 3, 4, 5, 1, 2, 3, 4];
   const theSneak = useRef();
   const [intervId, setInterId] = useState();
   const [toggleValue, setToggle] = useState();
 
   // helpfull function :
-  // 1/ moveFunction x + 40px
+
+  // 1/ move to right for the Sneak Div :
+  const moveToRight = (elem) => {
+    const cordination = elem.getBoundingClientRect();
+    elem.style.transform = `translateX(${cordination.x + 40}px)`;
+  };
+
+  // 2/ move to left for the Sneak Div :
+  const moveToLeft = (elem) => {
+    const cordination = elem.getBoundingClientRect();
+    elem.style.transform = `translateX(${cordination.x + 40}px)`;
+  };
+
+  // 3/ move to down for the Sneak Div :
+  const moveToDown = (elem) => {
+    const cordination = elem.getBoundingClientRect();
+    elem.style.transform = `translateX(${cordination.x + 40}px)`;
+  };
+
+  // 4/ move to up for the Sneak Div :
+  const moveToUpp = (elem) => {
+    const cordination = elem.getBoundingClientRect();
+    elem.style.transform = `translateX(${cordination.x + 40}px)`;
+  };
+
+  // 0/ moveFunction x + 40px
   const moveFunction = (elem) => {
     const cordination = elem.getBoundingClientRect();
     elem.style.transform = `translateX(${cordination.x + 40}px)`;
-    elem.classList.add("moveX");
-    console.log("move Function ");
-    console.log(cordination);
   };
 
   //   moveSneakDiv() function :
@@ -60,9 +82,28 @@ const Sneak = () => {
     }
   }, [toggleValue]);
 
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "ArrowUp") {
+      // Perform action for arrow up key press
+      console.log("Arrow Up pressed");
+    } else if (event.key === "ArrowDown") {
+      // Perform action for arrow down key press
+      console.log("Arrow Down pressed");
+    } else if (event.key === "ArrowLeft") {
+      // Perform action for arrow left key press
+      console.log("Arrow Left pressed");
+    } else if (event.key === "ArrowRight") {
+      // Perform action for arrow right key press
+      console.log("Arrow Right pressed");
+    }
+  });
+
   return (
     <>
-      <div className="sneakContainer flex  bg-yellow-300 moveX" ref={theSneak}>
+      <div
+        className="sneakContainer moveX flex flex-wrap flex-row-reverse w-32  bg-yellow-300 "
+        ref={theSneak}
+      >
         {/* the spans of the div of the sneaks  */}
         {array.map((elem, index) => {
           return (
@@ -81,8 +122,7 @@ const Sneak = () => {
           }}
           className="w-16  h-4 bg-gray-500 h-8 rounded-sm my-4 mx-2 "
         >
-          {" "}
-          start{" "}
+          start
         </button>
         <button
           onClick={() => {
@@ -90,8 +130,7 @@ const Sneak = () => {
           }}
           className="w-16  h-4 bg-gray-500 h-8 rounded-sm my-4 mx-2 "
         >
-          {" "}
-          Stop{" "}
+          Stop
         </button>
       </div>
     </>
