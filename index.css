@@ -103,7 +103,8 @@ body #root.darkHello {
   --textColor: black;
   transition: background-color 1s, color 1s;
 }
-*/ #root button {
+
+#root button {
   background: var(--backgroundColor);
   color: var(--textColor);
   transition: background-color 1s, color 1s;
