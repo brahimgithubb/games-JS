@@ -122,10 +122,15 @@ body #root.darkHello button {
 
 /* sneak move x class  */
 
-/* .moveX {
+.moveX {
   transition: transform 0.2;
   width: fit-content;
-} */
+}
+
+.sneakContainer {
+  display: grid;
+  grid-template-rows: 1;
+}
 /*  */
 /*  */
 /*  */
