@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 
 const Sneak = () => {
-  const [arrayStart, setArrayStart] = useState([1, 2, 3, 4, 5, 6]); // lenght 6 , indexMax 5
+  const [arrayStart, setArrayStart] = useState([1, 2, 3, 4, 5, 6, 3, 4, 5, 6]); // lenght 6 , indexMax 5
   const theSneak = useRef();
 
   const [testKey, setKey] = useState(10);
@@ -10,8 +10,8 @@ const Sneak = () => {
   // setToggleKeys();
   const [keysToggle, setToggleKeys] = useState();
   // idIntervals ();
-  const [idDown, setIdDown] = useState();
-  const [idRight, setIdRight] = useState();
+  const [idDown, setIdDown] = useState([]);
+  const [idRight, setIdRight] = useState([]);
   const [idLeft, setIdLeft] = useState();
   const [idUpp, setIdUpp] = useState();
   const [arrayCordinationMainSneak, setMainCordination] = useState();
@@ -66,6 +66,8 @@ const Sneak = () => {
     setArrayCordination(corrd);
   };
 
+  // 0/ firstmove Function :
+
   // 1/ move to Left for the Sneak Div :
   const moveToLeft = (elem, index, arraySpans) => {
     const cordination = elem.getBoundingClientRect();
@@ -104,38 +106,40 @@ const Sneak = () => {
   };
 
   // 2/ move to Right for the Sneak Div :
-  const moveToRight = (elem, index, arraySpans) => {
+  const moveToRight = (elem, index, arraySpans, firstSpan) => {
     const cordination = elem.getBoundingClientRect();
     setTimeout(() => {
       elem.style.background = "red";
     }, 500 * index);
     //   condition to move to right
 
-    if (testKey == 2) {
-      if (cordination.bottom < arraySpans[0].getBoundingClientRect().bottom) {
-        // move 16 px to right
-        elem.style.top = `${cordination.y + 16}px `;
-        console.log("Yesssp ", testKey, index);
-      }
-    }
+    // if (testKey == 2) {
+    //   if (cordination.bottom < firstSpan.bottom) {
+    //     // move 16 px to right
+    //     elem.style.top = `${cordination.y + 16}px `;
+    //     console.log("Yesssp ", testKey, index);
+    //   }
+    // }
 
-    // case from upp into right
+    // // case from upp into right
 
-    if (testKey == 1) {
-      if (cordination.bottom > arraySpans[0].getBoundingClientRect().bottom) {
-        console.log("Yesssp ", testKey, index);
-        elem.style.top = `${cordination.y - 16}px `;
-      }
-    }
+    // if (testKey == 1) {
+    //   if (cordination.bottom > firstSpan.bottom) {
+    //     console.log("Yesssp ", testKey, index);
+    //     elem.style.top = `${cordination.y - 16}px `;
+    //   }
+    // }
+
+    // fix issue of the first span:
 
     console.log("______________************* _____ Right key  :");
 
     if (
       cordination.right < window.innerWidth &&
-      cordination.top == arraySpans[0].getBoundingClientRect().top
+      cordination.top == firstSpan.top
     ) {
       elem.style.left = `${cordination.x + 16}px `;
-      // console.log("Yesssp ", index);
+      console.log("Yesssp Right  ", index);
     }
     // condition of shutDown
     if (
@@ -158,7 +162,7 @@ const Sneak = () => {
   // }, [arrayCordination]);
 
   // 3/ move to down for the Sneak Div :
-  const moveToDown = (elem, index, arraySpans) => {
+  const moveToDown = (elem, index, arraySpans, firstSpan) => {
     const cordination = elem.getBoundingClientRect();
     setTimeout(() => {
       elem.style.background = "red";
@@ -166,22 +170,20 @@ const Sneak = () => {
     //   cordination.right < arraySpans[0].getBoundingClientRect().right
 
     if (testKey != 3) {
-      if (cordination.right < arraySpans[0].getBoundingClientRect().right) {
+      if (cordination.right < firstSpan.right) {
         // move 16 px to right
-        console.log("________________________ Down Key  :", testKey);
         elem.style.left = `${cordination.x + 16}px `;
         // console.log("Yesssp ", index);
       }
     }
     if (testKey == 3) {
-      if (cordination.right > arraySpans[0].getBoundingClientRect().right) {
+      if (cordination.right > firstSpan.right) {
         elem.style.left = `${cordination.x - 16}px `;
       }
     }
     if (
       cordination.bottom + 16 <= window.innerHeight &&
-      Math.floor(cordination.right) ==
-        Math.floor(arraySpans[0].getBoundingClientRect().right)
+      Math.floor(cordination.right) == Math.floor(firstSpan.right)
     ) {
       // move 16px to bottom
       elem.style.top = `${cordination.y + 16}px `;
@@ -259,17 +261,23 @@ const Sneak = () => {
       setIdUpp(newId);
     }
     if (keysToggle == 2) {
-      clearInterval(idRight);
+      clearFunction(idRight);
       clearInterval(idLeft);
       clearInterval(idUpp);
-      setKey(2);
+      setKey(9);
 
-      const newId = setInterval(() => {
-        arraySpans.map((elem, index, arraySpans) => {
-          moveToDown(elem, index, arraySpans);
-        });
-      }, 300);
-      setIdDown(newId);
+      const firstSpan = arraySpans[0].getBoundingClientRect();
+      const newId = arraySpans.map((elem, index, arraySpans) => {
+        return setInterval(() => {
+          setTimeout(
+            () => {
+              moveToDown(elem, index, arraySpans, firstSpan);
+            },
+            testKey == 9 ? 500 * index : 0
+          );
+        }, 500);
+      });
+      setIdDown([...idDown, ...newId]);
     }
     if (keysToggle == 3) {
       clearInterval(idDown);
@@ -288,19 +296,24 @@ const Sneak = () => {
       // console.log(arrayCordination);
     }
     if (keysToggle == 4) {
-      clearInterval(idDown);
       clearInterval(idLeft);
       clearInterval(idUpp);
+      clearFunction(idDown);
 
-      setKey(4);
+      setKey(9);
 
-      const newId = setInterval(() => {
-        arraySpans.map((elem, index, arraySpans) => {
-          moveToRight(elem, index, arraySpans);
-        });
-      }, 300);
-
-      setIdRight(newId);
+      const firstSpan = arraySpans[0].getBoundingClientRect();
+      const newId = arraySpans.map((elem, index, arraySpans) => {
+        return setInterval(() => {
+          setTimeout(
+            () => {
+              moveToRight(elem, index, arraySpans, firstSpan);
+            },
+            testKey == 9 ? 500 * index : 0
+          );
+        }, 500);
+      });
+      setIdRight([...idRight, ...newId]);
     }
 
     if (keysToggle === 5) {
