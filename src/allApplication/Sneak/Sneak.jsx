@@ -2,346 +2,98 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 
 const Sneak = () => {
-  const [arrayStart, setArrayStart] = useState([1, 2, 3, 4, 5, 6, 3, 4, 5, 6]); // lenght 6 , indexMax 5
+  const arrayStart = [1, 2, 3, 4, 5, 6];
   const theSneak = useRef();
 
-  const [testKey, setKey] = useState(10);
-  const [arrayLengthChange, setArrayLength] = useState(arrayStart.length);
-  // setToggleKeys();
-  const [keysToggle, setToggleKeys] = useState();
-  // idIntervals ();
-  const [idDown, setIdDown] = useState([]);
-  const [idRight, setIdRight] = useState([]);
-  const [idLeft, setIdLeft] = useState();
-  const [idUpp, setIdUpp] = useState();
-  const [arrayCordinationMainSneak, setMainCordination] = useState();
-  // this 2 array is for the functions
-  const [arrayCordination, setArrayCordination] = useState();
-  const [arraySpans, setArraySpans] = useState();
-  // helpfull function :
+  // keyMove from 1 to 5 (5 is for shutDown the intervels and clear all intervels )
+  const [keyMove, setKeyMove] = useState();
 
-  // shutDown button
+  // All Intervl ids
+  const [idRight, setIdRight] = useState();
 
-  // useEffect(() => {
-  //   const elem = theSneak.current;
-  //   elem.classList.remove("w-fit");
-
-  //   if (arrayLengthChange > 0) {
-  //     elem.style.width = `${1 * arrayLengthChange}rem`;
-  //     console.log("kjslkfjsdlfjks;lfkjds", elem.style.width);
-  //   }
-  // }, [arrayLengthChange]);
-  //
-  //
-  // function of array of spans and array of cordinations :
-  const moveSpansAbsPosi = () => {
-    const newArraySpans = Array.from(
-      document.getElementsByClassName("golobalSpan")
-    ).reverse();
-
-    newArraySpans.map((elem, index) => {
-      elem.style.left = `${1 * index}rem`;
-    });
-
-    // set the spans into reverse order inside arraySpans
-    setArraySpans(newArraySpans.reverse());
+  // get update coordination of the spanArray :
+  const updateSneak = () => {
+    return Array.from(document.getElementsByClassName("golobalSpan"));
   };
 
-  useEffect(() => {
-    moveSpansAbsPosi();
-  }, []);
-
-  // change the coordinations :
-
-  const updateCordination = () => {
-    const newArraySpans = Array.from(
-      document.getElementsByClassName("golobalSpan")
-    ).reverse();
-
-    const corrd = newArraySpans.map((elem, index) => {
+  // get update coordination of the Sneak :
+  const updateCoordination = () => {
+    return updateSneak().map((elem) => {
       return elem.getBoundingClientRect();
     });
-
-    // save the new coordination
-    setArrayCordination(corrd);
   };
+  // start betweenSpan 16px between elements of the arrayStart
+  const betweenSpanSpace = () => {
+    updateSneak()
+      .reverse()
+      .map((elem, index) => {
+        elem.style.left = `${elem.getBoundingClientRect().left + 16 * index}px`;
+      });
+  };
+  // add color for the first and the second spans :
 
-  // 0/ firstmove Function :
-
-  // 1/ move to Left for the Sneak Div :
-  const moveToLeft = (elem, index, arraySpans) => {
-    const cordination = elem.getBoundingClientRect();
-    console.log("Hello from map moveToLeft , : ", cordination.top, index);
-
-    //  from down
-
-    if (cordination.bottom < arraySpans[0].getBoundingClientRect().bottom) {
-      // move 16 px to right
-      elem.style.top = `${cordination.y + 16}px `;
-      console.log("Yesssp ", index);
-    }
-
-    if (testKey == 1) {
-      if (cordination.bottom > arraySpans[0].getBoundingClientRect().bottom) {
-        // move 16 px to right
-        elem.style.top = `${cordination.y - 16}px `;
-        console.log("Yesssp ", index);
+  const colorizeFS = () => {
+    updateSneak().map((elem, index) => {
+      if (index == 0) {
+        elem.style.background = "red";
       }
-    }
-
-    // origin move
-    if (
-      cordination.left - 16 >= 0 &&
-      cordination.top == arraySpans[0].getBoundingClientRect().top
-    ) {
-      // move 16px to bottom
-      elem.style.left = `${cordination.x - 16}px `;
-      console.log("yyyyyyyyy ", index);
-    }
-
-    // the limites of shutDown the operation
-    if (cordination.left - 16 <= 0 && index == arraySpans.length - 1) {
-      setToggleKeys(5);
-    }
+      if (index == 1) {
+        elem.style.background = "blue";
+      }
+      if (index == 2) {
+        elem.style.background = "yellow";
+      }
+      if (index == 3) {
+        elem.style.background = "white";
+      }
+      if (index == 4) {
+        elem.style.background = "black";
+      }
+    });
   };
 
-  // 2/ move to Right for the Sneak Div :
-  const moveToRight = (elem, index, arraySpans, firstSpan) => {
-    const cordination = elem.getBoundingClientRect();
-    setTimeout(() => {
-      elem.style.background = "red";
-    }, 500 * index);
-    //   condition to move to right
-
-    // if (testKey == 2) {
-    //   if (cordination.bottom < firstSpan.bottom) {
-    //     // move 16 px to right
-    //     elem.style.top = `${cordination.y + 16}px `;
-    //     console.log("Yesssp ", testKey, index);
-    //   }
-    // }
-
-    // // case from upp into right
-
-    // if (testKey == 1) {
-    //   if (cordination.bottom > firstSpan.bottom) {
-    //     console.log("Yesssp ", testKey, index);
-    //     elem.style.top = `${cordination.y - 16}px `;
-    //   }
-    // }
-
-    // fix issue of the first span:
-
-    console.log("______________************* _____ Right key  :");
-
-    if (
-      cordination.right < window.innerWidth &&
-      cordination.top == firstSpan.top
-    ) {
-      elem.style.left = `${cordination.x + 16}px `;
-      console.log("Yesssp Right  ", index);
-    }
-    // condition of shutDown
-    if (
-      cordination.right + 16 >= window.innerWidth &&
-      index == arraySpans.length - 1
-    ) {
-      console.log("this is the toggle 5 ", index);
-      setToggleKeys(5);
-    }
-  };
-
-  // update the coordination for the first rendering :
   useEffect(() => {
-    updateCordination();
+    betweenSpanSpace();
+    colorizeFS();
   }, []);
-  // useEffect(() => {
-  //   console.log("_____________________");
-  //   console.log(arrayCordination);
-  //   console.log("_____________________");
-  // }, [arrayCordination]);
+  // done between span 16px
 
-  // 3/ move to down for the Sneak Div :
-  const moveToDown = (elem, index, arraySpans, firstSpan) => {
-    const cordination = elem.getBoundingClientRect();
-    setTimeout(() => {
-      elem.style.background = "red";
-    }, 500 * index);
-    //   cordination.right < arraySpans[0].getBoundingClientRect().right
-
-    if (testKey != 3) {
-      if (cordination.right < firstSpan.right) {
-        // move 16 px to right
-        elem.style.left = `${cordination.x + 16}px `;
-        // console.log("Yesssp ", index);
-      }
+  // start  function Right :
+  const moveToRight = (elem, index, coordinationElem) => {
+    if (coordinationElem.right + 16 * index < window.innerWidth) {
+      console.log(
+        "coordination left  of first span red : ",
+        coordinationElem.x,
+        "this is the width of the page ",
+        window.innerWidth
+      );
+      elem.style.left = `${coordinationElem.left + 16}px`;
     }
-    if (testKey == 3) {
-      if (cordination.right > firstSpan.right) {
-        elem.style.left = `${cordination.x - 16}px `;
-      }
+    if (coordinationElem.left + 16 >= window.innerWidth) {
+      console.log("Hello yeess inside ___________-", keyMove);
+      setKeyMove(5);
     }
-    if (
-      cordination.bottom + 16 <= window.innerHeight &&
-      Math.floor(cordination.right) == Math.floor(firstSpan.right)
-    ) {
-      // move 16px to bottom
-      elem.style.top = `${cordination.y + 16}px `;
-    }
-
-    if (
-      cordination.bottom + 16 >= window.innerHeight &&
-      index == arraySpans.length - 1
-    ) {
-      setToggleKeys(5);
-    }
+    console.log("Hello from outside ");
   };
-
-  // 4/ move to up for the Sneak Div :
-  const moveToUpp = (elem, index, arraySpans) => {
-    const cordination = elem.getBoundingClientRect();
-    setTimeout(() => {
-      elem.style.background = "red";
-    }, 500 * index);
-    //   cordination.right < arraySpans[0].getBoundingClientRect().right
-    if (testKey != 3) {
-      if (cordination.left < arraySpans[0].getBoundingClientRect().left) {
-        // move 16 px to right
-        elem.style.left = `${cordination.x + 16}px `;
-        // console.log("Yesssp ", index);
-      }
-    }
-
-    if (testKey == 3) {
-      if (cordination.right > arraySpans[0].getBoundingClientRect().right) {
-        elem.style.left = `${cordination.x - 16}px `;
-      }
-    }
-    // origin move :
-    if (
-      cordination.top - 16 >= 0 &&
-      Math.floor(cordination.left) ==
-        Math.floor(arraySpans[0].getBoundingClientRect().left)
-    ) {
-      // move 16px to bottom
-      elem.style.top = `${cordination.y - 16}px `;
-    }
-    // condition shutdown
-
-    if (cordination.top - 16 <= 0 && index == arraySpans.length - 1) {
-      setToggleKeys(5);
-    }
-  };
-
-  // function help of loop intervals
-
-  const clearFunction = (table) => {
-    for (let i = 0; i < table.length; i++) {
-      setTimeout(() => {
-        clearInterval(table[i]);
-      }, 500 * i);
-    }
-  };
-  // the main controol
-  useEffect(() => {
-    // console the array
-    if (keysToggle == 1) {
-      clearInterval(idRight);
-      clearInterval(idLeft);
-      clearInterval(idDown);
-
-      setKey(1);
-
-      const newId = setInterval(() => {
-        arraySpans.map((elem, index, arraySpans) => {
-          moveToUpp(elem, index, arraySpans);
-        });
-      }, 300);
-
-      setIdUpp(newId);
-    }
-    if (keysToggle == 2) {
-      clearFunction(idRight);
-      clearInterval(idLeft);
-      clearInterval(idUpp);
-      setKey(9);
-
-      const firstSpan = arraySpans[0].getBoundingClientRect();
-      const newId = arraySpans.map((elem, index, arraySpans) => {
-        return setInterval(() => {
-          setTimeout(
-            () => {
-              moveToDown(elem, index, arraySpans, firstSpan);
-            },
-            testKey == 9 ? 500 * index : 0
-          );
-        }, 500);
-      });
-      setIdDown([...idDown, ...newId]);
-    }
-    if (keysToggle == 3) {
-      clearInterval(idDown);
-      clearInterval(idRight);
-      clearInterval(idUpp);
-
-      setKey(3);
-
-      const newId = setInterval(() => {
-        arraySpans.map((elem, index, arraySpans) => {
-          moveToLeft(elem, index, arraySpans);
-        });
-      }, 300);
-
-      setIdLeft(newId);
-      // console.log(arrayCordination);
-    }
-    if (keysToggle == 4) {
-      clearInterval(idLeft);
-      clearInterval(idUpp);
-      clearFunction(idDown);
-
-      setKey(9);
-
-      const firstSpan = arraySpans[0].getBoundingClientRect();
-      const newId = arraySpans.map((elem, index, arraySpans) => {
-        return setInterval(() => {
-          setTimeout(
-            () => {
-              moveToRight(elem, index, arraySpans, firstSpan);
-            },
-            testKey == 9 ? 500 * index : 0
-          );
-        }, 500);
-      });
-      setIdRight([...idRight, ...newId]);
-    }
-
-    if (keysToggle === 5) {
-      clearInterval(idDown);
-      clearInterval(idRight);
-      clearInterval(idUpp);
-      clearInterval(idLeft);
-      // clearInterval(idRight);
-    }
-  }, [keysToggle]);
-
   const handleArrowKeyPress = (event) => {
     switch (event.key) {
       case "ArrowUp":
-        setToggleKeys(1);
         console.log("Arrow Up pressed");
+        setKeyMove(1);
+
         break;
       case "ArrowDown":
-        setToggleKeys(2);
         console.log("Arrow Down pressed");
+        setKeyMove(2);
         break;
       case "ArrowLeft":
-        setToggleKeys(3);
         console.log("Arrow Left pressed");
+        setKeyMove(3);
         break;
       case "ArrowRight":
-        setToggleKeys(4);
         console.log("Arrow Right pressed");
+        console.log(updateCoordination()[0]);
+        setKeyMove(4);
         break;
       default:
         break;
@@ -355,6 +107,31 @@ const Sneak = () => {
     };
   }, []);
 
+  // useEffect base on the keyMove
+
+  useEffect(() => {
+    switch (keyMove) {
+      case 1:
+        break;
+      case 2:
+        break;
+      case 3:
+        break;
+      case 4:
+        const intervalId = setInterval(() => {
+          const arraySpan = updateSneak();
+          // const arrayCoordination = updateCoordination();
+          arraySpan.forEach((elem, index) => {
+            moveToRight(elem, index, arraySpan[index].getBoundingClientRect());
+          });
+        }, 200);
+        setIdRight(intervalId);
+        return () => clearInterval(idRight);
+      case 5:
+        clearInterval(idRight);
+        break;
+    }
+  }, [keyMove]);
   return (
     <>
       {/*  flex flex-wrap flex-row-reverse */}
@@ -371,28 +148,6 @@ const Sneak = () => {
             ></span>
           );
         })}
-      </div>
-
-      <div className="controll Help">
-        <button
-          onClick={() => {
-            setToggle(1);
-          }}
-          className="w-16  h-4 bg-gray-500 h-8 rounded-sm my-4 mx-2 "
-        >
-          start
-        </button>
-        <button
-          onClick={() => {
-            setToggle(2);
-          }}
-          className="w-16  h-4 bg-gray-500 h-8 rounded-sm my-4 mx-2 "
-        >
-          Stop
-        </button>
-        <button className="w-16  h-4 bg-gray-500 h-8 rounded-sm my-4 mx-2 ">
-          Down
-        </button>
       </div>
     </>
   );
