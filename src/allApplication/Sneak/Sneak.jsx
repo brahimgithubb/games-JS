@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 
 const Sneak = () => {
-  const arrayStart = [1, 2, 3, 4, 5, 6];
+  const arrayStart = [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6];
   const theSneak = useRef();
 
   // keyMove from 1 to 5 (5 is for shutDown the intervels and clear all intervels )
@@ -11,6 +11,9 @@ const Sneak = () => {
   // previous key :
   const [previousKey, setPreviousKey] = useState(10);
 
+  // cheak if the first Down function or not :
+
+  const [notFirst, setNotFirst] = useState(false);
   // All Intervl ids
   const [idRight, setIdRight] = useState([]);
   const [idDown, setIdDown] = useState([]);
@@ -166,6 +169,9 @@ const Sneak = () => {
       case 2:
         clearFunction(idRight);
         setPreviousKey(2);
+        if (previousKey != 10) {
+          setNotFirst(true);
+        }
         const arraySpanDown = updateSneak();
         const fisrtSpan = updateCoordination()[0];
         const idDownNew = arraySpanDown.map((elem, index) => {
@@ -190,7 +196,7 @@ const Sneak = () => {
       case 3:
         break;
       case 4:
-        clearFunctionDelay(idDown);
+        notFirst ? clearFunction(idDown) : clearFunctionDelay(idDown);
         setPreviousKey(4);
         const arraySpan = updateSneak();
         const fisrtSpanRight = updateCoordination()[0];
