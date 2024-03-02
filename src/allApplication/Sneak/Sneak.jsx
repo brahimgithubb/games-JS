@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 
 const Sneak = () => {
-  const arrayStart = [1, 2, 3, 4, 5, 6, 1, 2, 3, 4, 5, 6];
+  const arrayStart = [1, 2, 3, 4, 5, 6];
   const theSneak = useRef();
 
   // keyMove from 1 to 5 (5 is for shutDown the intervels and clear all intervels )
@@ -15,8 +15,10 @@ const Sneak = () => {
 
   const [notFirst, setNotFirst] = useState(false);
   // All Intervl ids
-  const [idRight, setIdRight] = useState([]);
+  const [idUpp, setIdUpp] = useState([]);
+  const [idLeft, setIdLeft] = useState([]);
   const [idDown, setIdDown] = useState([]);
+  const [idRight, setIdRight] = useState([]);
 
   // get update coordination of the spanArray :
   const updateSneak = () => {
@@ -65,11 +67,42 @@ const Sneak = () => {
   }, []);
   // done between span 16px
 
+  //1// start of the moveToDown()
+
+  const moveToUpp = (elem, index, coordinationElem, firstSpan) => {
+    if (previousKey == 4) {
+      if (coordinationElem.left < firstSpan.left) {
+        elem.style.left = `${coordinationElem.left + 16}px`;
+      }
+    }
+    if (
+      coordinationElem.top - 16 * index > 0 &&
+      coordinationElem.left == firstSpan.left
+    ) {
+      elem.style.top = `${coordinationElem.top - 16}px`;
+    }
+    if (coordinationElem.top - 16 <= 0) {
+      setKeyMove(5);
+    }
+    console.log("Hello from outside ");
+  };
+
+  //1// end of the moveToDown()
+
   //2// start of the moveToDown()
 
   const moveToDown = (elem, index, coordinationElem, firstSpan) => {
-    if (coordinationElem.right < firstSpan.right) {
-      elem.style.left = `${coordinationElem.left + 16}px`;
+    // case come from Left
+    if (previousKey == 3) {
+      if (coordinationElem.left > firstSpan.left) {
+        elem.style.left = `${coordinationElem.left - 16}px`;
+      }
+    }
+    // case come from right or first time to move
+    if (previousKey == 4 || previousKey == 10) {
+      if (coordinationElem.right < firstSpan.right) {
+        elem.style.left = `${coordinationElem.left + 16}px`;
+      }
     }
     if (
       coordinationElem.bottom + 16 * index < window.innerHeight &&
@@ -84,6 +117,43 @@ const Sneak = () => {
   };
 
   //2// end of the moveToDown()
+
+  //  3 // start  function Left :
+  const moveToLeft = (elem, index, coordinationElem, firstSpan) => {
+    if (previousKey == 1) {
+      if (coordinationElem.top < firstSpan.top) {
+        elem.style.top = `${coordinationElem.top + 16}px`;
+      }
+    }
+    // // case come from right or first time to move
+    // if (previousKey == 3) {
+    //   if (coordinationElem.right < firstSpan.right) {
+    //     elem.style.left = `${coordinationElem.left + 16}px`;
+    //   }
+    // }
+
+    if (
+      coordinationElem.right - 16 * index > 0 &&
+      coordinationElem.top == firstSpan.top
+    ) {
+      console.log(
+        "top of firstSpan : ",
+        firstSpan.top,
+        "top of elem : ",
+        coordinationElem.top,
+        "index is : ",
+        index
+      );
+      elem.style.left = `${coordinationElem.left - 16}px`;
+    }
+    if (coordinationElem.left - 16 < 0) {
+      console.log("Hello yeess inside ___________-", keyMove);
+      setKeyMove(5);
+    }
+    console.log("Hello from outside ");
+  };
+
+  // 3 //end of the moveToRight()
 
   // 4 // start  function Right :
   const moveToRight = (elem, index, coordinationElem, firstSpan) => {
@@ -151,11 +221,13 @@ const Sneak = () => {
       clearInterval(elem);
     });
   };
+
+  // clear function with delay
   const clearFunctionDelay = (table) => {
     table.forEach((elem, index) => {
       setTimeout(() => {
         clearInterval(elem);
-      }, 500 * index);
+      }, 300 * index);
     });
   };
 
@@ -165,9 +237,36 @@ const Sneak = () => {
   useEffect(() => {
     switch (keyMove) {
       case 1:
-        break;
+        notFirst ? clearFunction(idDown) : clearFunctionDelay(idDown);
+        notFirst ? clearFunction(idRight) : clearFunctionDelay(idRight);
+        notFirst ? clearFunction(idLeft) : clearFunctionDelay(idLeft);
+        setPreviousKey(1);
+        const arraySpanUpp = updateSneak();
+        const fisrtSpanUpp = updateCoordination()[0];
+
+        const idUppNew = arraySpanUpp.map((elem, index) => {
+          return setInterval(() => {
+            // const arrayCoordination = updateCoordination();
+
+            setTimeout(
+              () => {
+                moveToUpp(
+                  elem,
+                  index,
+                  arraySpanUpp[index].getBoundingClientRect(),
+                  // arraySpanLeft[0].getBoundingClientRect()
+                  fisrtSpanUpp
+                );
+              },
+              previousKey != 10 && index != 0 ? 300 * index : 0
+            );
+          }, 300);
+        });
+        setIdUpp([...idUpp, ...idUppNew]);
+        return () => clearFunction(idUpp);
       case 2:
         clearFunction(idRight);
+        clearFunction(idLeft);
         setPreviousKey(2);
         if (previousKey != 10) {
           setNotFirst(true);
@@ -187,16 +286,45 @@ const Sneak = () => {
                   fisrtSpan
                 );
               },
-              previousKey != 10 && index != 0 ? 500 * index : 0
+              previousKey != 10 && index != 0 ? 300 * index : 0
             );
-          }, 500);
+          }, 300);
         });
         setIdDown([...idDown, ...idDownNew]);
         return () => clearFunction(idDown);
       case 3:
-        break;
+        notFirst ? clearFunction(idDown) : clearFunctionDelay(idDown);
+        notFirst ? clearFunction(idRight) : clearFunctionDelay(idRight);
+        clearFunction(idUpp);
+        setPreviousKey(3);
+        const arraySpanLeft = updateSneak();
+        const fisrtSpanLeft = updateCoordination()[0];
+
+        const idLeftNew = arraySpanLeft.map((elem, index) => {
+          return setInterval(() => {
+            // const arrayCoordination = updateCoordination();
+
+            setTimeout(
+              () => {
+                moveToLeft(
+                  elem,
+                  index,
+                  arraySpanLeft[index].getBoundingClientRect(),
+                  // arraySpanLeft[0].getBoundingClientRect()
+                  fisrtSpanLeft
+                );
+              },
+              previousKey != 10 && index != 0 ? 300 * index : 0
+            );
+          }, 300);
+        });
+        setIdLeft([...idLeft, ...idLeftNew]);
+        return () => clearFunction(idLeft);
       case 4:
         notFirst ? clearFunction(idDown) : clearFunctionDelay(idDown);
+        notFirst ? clearFunction(idLeft) : clearFunctionDelay(idLeft);
+        clearFunction(idUpp);
+
         setPreviousKey(4);
         const arraySpan = updateSneak();
         const fisrtSpanRight = updateCoordination()[0];
@@ -215,9 +343,9 @@ const Sneak = () => {
                   fisrtSpanRight
                 );
               },
-              previousKey != 10 && index != 0 ? 500 * index : 0
+              previousKey != 10 && index != 0 ? 300 * index : 0
             );
-          }, 500);
+          }, 300);
         });
         setIdRight([...idRight, ...idRightNew]);
         return () => clearFunction(idRight);
