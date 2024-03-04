@@ -1,8 +1,13 @@
+//
+//
+
+//
+
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 
 const Sneak = () => {
-  const arrayStart = [1, 2, 3, 4, 5, 6];
+  const [arrayStart, setArrayStart] = useState([1, 2, 3, 4, 5, 6]);
   const theSneak = useRef();
 
   // keyMove from 1 to 5 (5 is for shutDown the intervels and clear all intervels )
@@ -66,6 +71,40 @@ const Sneak = () => {
     colorizeFS();
   }, []);
   // done between span 16px
+
+  // start of function test if target get targeted from the first span :
+
+  const cheakTarget = () => {
+    // get the span[0] and spanTarget getBoundingClientRect() values :
+
+    const firstSpanCoor = updateSneak()[0].getBoundingClientRect();
+    const TargetSpanCoor = document
+      .getElementById("theTarget")
+      .getBoundingClientRect();
+
+    // this is for cheak Target
+
+    if (
+      firstSpanCoor.left == TargetSpanCoor.left &&
+      firstSpanCoor.top == TargetSpanCoor.top
+    ) {
+      // add elem
+      setArrayStart((prev) => [...prev, 100]);
+      console.log("...........................");
+      console.log("...........................");
+      console.log(arrayStart);
+      console.log("...........................");
+      console.log("...........................");
+    }
+  };
+
+  useEffect(() => {
+    const idInter = setInterval(() => {
+      cheakTarget();
+    }, 300);
+    return () => clearInterval(idInter);
+  }, []);
+  // end of function test if target get targeted from the first span
 
   //1// start of the moveToDown()
 
@@ -355,22 +394,29 @@ const Sneak = () => {
         break;
     }
   }, [keyMove]);
+
   return (
     <>
       {/*  flex flex-wrap flex-row-reverse */}
-      <div
-        className="sneakContainer w-fit moveX grid grid-cols-6 space gap-1 relatvie   bg-yellow-300 "
-        ref={theSneak}
-      >
-        {/* the spans of the div of the sneaks  */}
-        {arrayStart.map((_, index) => {
-          return (
-            <span
-              className={`block bg-green-400 border border-black w-4 h-4 absolute top-1  golobalSpan privateSpan_${index}`}
-              key={index}
-            ></span>
-          );
-        })}
+      <div className=" bg-yellow-400 w-100vw h-100vh">
+        <span
+          id="theTarget"
+          className={`block bg-red-300 border border-black w-4 h-4 absolute top-224 left-50%   targetSpan `}
+        ></span>
+        <div
+          className="sneakContainer w-fit moveX grid grid-cols-6 space gap-1
+        relatvie bg-yellow-300 "
+          ref={theSneak}
+        >
+          {arrayStart.map((_, index) => {
+            return (
+              <span
+                className={`block bg-green-400 border border-black w-4 h-4 absolute  golobalSpan privateSpan_${index}`}
+                key={index}
+              ></span>
+            );
+          })}
+        </div>
       </div>
     </>
   );

@@ -20,6 +20,7 @@ export default {
         "45vh": "45vh",
         "25vh": "25vh",
         "300px": "300px",
+        224: "224px",
       },
       transitionProperty: {
         text: "font-size",
